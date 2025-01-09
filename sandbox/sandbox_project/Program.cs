@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 
 public class Program
 {
@@ -8,6 +9,14 @@ public class Program
         // with any code or ideas you have that do not directly apply to
         // one of your projects.
 
-        Console.WriteLine("Hello Sandbox World!");
+        var numbers = new List<int> {1,2,3,4,5};
+
+        foreach (var item in numbers) {
+            Console.WriteLine(item);
+        }
+
+        for (var index = 0; index < numbers.Count; index++) {
+            Console.WriteLine(numbers[index]);
+        }
     }
 }
