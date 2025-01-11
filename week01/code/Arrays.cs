@@ -1,3 +1,6 @@
+
+
+
 public static class Arrays
 {
     /// <summary>
@@ -8,12 +11,22 @@ public static class Arrays
     /// <returns>array of doubles that are the multiples of the supplied number</returns>
     public static double[] MultiplesOf(double number, int length)
     {
-        // TODO Problem 1 Start
-        // Remember: Using comments in your program, write down your process for solving this problem
-        // step by step before you write the code. The plan should be clear enough that it could
-        // be implemented by another person.
 
-        return []; // replace this return statement with your own
+        /// First of all, I need a list that can store these elements. It can be an array cause the "lenght" will vary.
+        /// To get a multiple of a number, you multiply that "number" by another. e.g (7*4 = 28, 28 is a multiple of 7)
+        /// I must do a loop that can multiple the number chosen, starting with 1 and increasing till it reach to the
+        /// "lenght" specified. The "lenght" will be the same as the last multiplier. e.g (lenght = 4, it must get 4
+        /// multiples. Multiply it by 1,2,3 and 4)
+
+        List<double> multiples = new();
+
+        for (int i = 1; i <= length; i++) {
+            double element = number * i;
+
+            multiples.Add(element);
+        }
+
+        return multiples.ToArray();
     }
 
     /// <summary>
@@ -25,9 +38,18 @@ public static class Arrays
     /// </summary>
     public static void RotateListRight(List<int> data, int amount)
     {
-        // TODO Problem 2 Start
-        // Remember: Using comments in your program, write down your process for solving this problem
-        // step by step before you write the code. The plan should be clear enough that it could
-        // be implemented by another person.
+
+        /// First I need to get how many elements the list has, so I can calculate the last elements which will
+        /// be defined by the "amount" variable. If I want to rotate the last 4 elements, the amount will be 4.
+        /// Then I need to remove the last elements defined by the "amount" variable from the list and insert them
+        /// in the beggining of the list using Remove, and Insert Range functions.
+
+        int c = data.Count;
+
+        List<int> lastElements = data.GetRange(c - amount, amount);
+
+        data.RemoveRange(c - amount, amount);
+
+        data.InsertRange(0, lastElements);
     }
 }
