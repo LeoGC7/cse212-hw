@@ -1,74 +1,102 @@
 using System;
-using System.Runtime.CompilerServices;
 
-public static class SetOperations {
-    public static HashSet<int> FindIntersection(HashSet<int> set1, HashSet<int> set2) {
+public class Node<T>
+{
+    public T Data;
+    public Node<T> Next;
 
-        HashSet<int> result = new HashSet<int>();
-
-        foreach (int num in set1) {
-            if (set2.Contains(num)) { // I iterate through set1 and compare it's numbers with set 2, if they have numbers in common the number will be added to the result
-                result.Add(num);
-            }
-        }
-
-        return result; // Big O notation is O(n+n) = O(2n) which is O(n), n being the size of the set
-    }
-
-    //Find Union Function
-    public static HashSet<int> FindUnion(HashSet<int> set1, HashSet<int> set2) { //Here I create a function that returns a HashSet and receive two HashSets as parameters
-        
-        HashSet<int> result = new HashSet<int>();
-        
-        foreach(int num in set1) { //First I iterate through set1 and add all the numbers to the result
-            result.Add(num);
-        } 
-
-        foreach(int num in set2) { //Then I iterate through set2 and aslo add all the numbers to the result
-            result.Add(num);
-        }
-
-        return result; //Since result is a HashSet, duplicated numbers won't be added again, resulting in the union of the numbers that set1 and set2 has in commmon
-                       // Big O notation is O(n+n) = O(2n) which is O(n), n being the size of the set
-    }
-
-
-    // Test cases
-    public static void Main() {
-        // Test cases for FindIntersection
-        HashSet<int> set1 = new HashSet<int> { 1, 2, 3, 4 };
-        HashSet<int> set2 = new HashSet<int> { 3, 4, 5, 6 };
-
-        HashSet<int> intersection = FindIntersection(set1, set2);
-        Console.WriteLine(string.Join(" ", intersection)); // Expected: 3, 4
-
-        HashSet<int> set3 = new HashSet<int> { 1, 2 };
-        HashSet<int> set4 = new HashSet<int> { 3, 4 };
-
-        HashSet<int> intersection2 = FindIntersection(set3, set4);
-        Console.WriteLine(string.Join(" ", intersection2)); // Expected: (empty)
-
-        HashSet<int> set5 = new HashSet<int> { 1 };
-        HashSet<int> set6 = new HashSet<int> { 1, 2, 3, 4, 5, 6, 7 };
-
-        HashSet<int> intersection3 = FindIntersection(set5, set6);
-        Console.WriteLine(string.Join(" ", intersection3)); // Expected: 1
-
-        // Test cases for FindUnion
-        HashSet<int> union = FindUnion(set1, set2);
-        Console.WriteLine(string.Join(" ", union)); // Expected: 1, 2, 3, 4, 5, 6
-
-        HashSet<int> set7 = new HashSet<int> {};
-        HashSet<int> set8 = new HashSet<int> { 6, 7, 8 };
-
-        HashSet<int> union2 = FindUnion(set7, set8);
-        Console.WriteLine(string.Join(" ", union2)); // Expected: 6, 7, 8
-
-        HashSet<int> set9 = new HashSet<int> {};
-        HashSet<int> set10 = new HashSet<int> {};
-
-        HashSet<int> union3 = FindUnion(set9, set10);
-        Console.WriteLine(string.Join(" ", union3)); // Expected: (empty)
+    public Node(T data)
+    {
+        Data = data;
+        Next = null;
     }
 }
 
+// Stack using Linked List
+public class Stack<T>
+{
+    private Node<T> top;
+
+    public void Push(T data)
+    {
+        Node<T> newNode = new Node<T>(data);
+        newNode.Next = top;
+        top = newNode;
+    }
+
+    public T Pop()
+    {
+        if (IsEmpty()) throw new InvalidOperationException("Stack is empty.");
+        T data = top.Data;
+        top = top.Next;
+        return data;
+    }
+
+    public T GetTop()
+    {
+        if (IsEmpty()) throw new InvalidOperationException("Stack is empty.");
+        return top.Data;
+    }
+
+    public bool IsEmpty()
+    {
+        return top == null;
+    }
+}
+
+// Queue using Linked List
+public class Queue<T>
+{
+    private Node<T> front;
+    private Node<T> rear;
+    private int count;
+
+    public void Enqueue(T data)
+    {
+        Node<T> newNode = new Node<T>(data);
+        if (rear != null) rear.Next = newNode;
+        rear = newNode;
+        if (front == null) front = newNode;
+        count++;
+    }
+
+    public T Dequeue()
+    {
+        if (IsEmpty()) throw new InvalidOperationException("Queue is empty.");
+        T data = front.Data;
+        front = front.Next;
+        if (front == null) rear = null;
+        count--;
+        return data;
+    }
+
+    public bool IsEmpty()
+    {
+        return front == null;
+    }
+
+    public int Size()
+    {
+        return count;
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        Console.WriteLine("Stack Example:");
+        Stack<int> stack = new Stack<int>();
+        stack.Push(10);
+        stack.Push(20);
+        Console.WriteLine($"Top Element: {stack.GetTop()}");
+        Console.WriteLine($"Popped: {stack.Pop()}");
+
+        Console.WriteLine("\nQueue Example:");
+        Queue<int> queue = new Queue<int>();
+        queue.Enqueue(10);
+        queue.Enqueue(20);
+        Console.WriteLine($"Dequeued: {queue.Dequeue()}");
+        Console.WriteLine($"Queue Size: {queue.Size()}");
+    }
+}
