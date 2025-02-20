@@ -1,102 +1,40 @@
-using System;
-
-public class Node<T>
+public class Node
 {
-    public T Data;
-    public Node<T> Next;
+    public int Data { get; set; }
+    public Node? Left { get; set; }
+    public Node? Right { get; set; }
 
-    public Node(T data)
+    public Node(int data)
     {
-        Data = data;
-        Next = null;
+        this.Data = data;
     }
 }
 
-// Stack using Linked List
-public class Stack<T>
+public class BinaryTree
 {
-    private Node<T> top;
+    public Node? Root { get; set; }
 
-    public void Push(T data)
+    public bool IsValidBST()
     {
-        Node<T> newNode = new Node<T>(data);
-        newNode.Next = top;
-        top = newNode;
+        return IsValidBST(Root, long.MinValue, long.MaxValue);
     }
 
-    public T Pop()
+    private bool IsValidBST(Node? node, long min, long max)
     {
-        if (IsEmpty()) throw new InvalidOperationException("Stack is empty.");
-        T data = top.Data;
-        top = top.Next;
-        return data;
-    }
 
-    public T GetTop()
-    {
-        if (IsEmpty()) throw new InvalidOperationException("Stack is empty.");
-        return top.Data;
-    }
+        // Base case: an empty tree is a valid BST
+        if (node == null)
+        {
+            return true;
+        }
 
-    public bool IsEmpty()
-    {
-        return top == null;
-    }
-}
+        // Code to see if the current node's value is in the valid range
+        if (node.Data <= min || node.Data >= max)
+        {
+            return false;
+        }
 
-// Queue using Linked List
-public class Queue<T>
-{
-    private Node<T> front;
-    private Node<T> rear;
-    private int count;
-
-    public void Enqueue(T data)
-    {
-        Node<T> newNode = new Node<T>(data);
-        if (rear != null) rear.Next = newNode;
-        rear = newNode;
-        if (front == null) front = newNode;
-        count++;
-    }
-
-    public T Dequeue()
-    {
-        if (IsEmpty()) throw new InvalidOperationException("Queue is empty.");
-        T data = front.Data;
-        front = front.Next;
-        if (front == null) rear = null;
-        count--;
-        return data;
-    }
-
-    public bool IsEmpty()
-    {
-        return front == null;
-    }
-
-    public int Size()
-    {
-        return count;
-    }
-}
-
-class Program
-{
-    static void Main()
-    {
-        Console.WriteLine("Stack Example:");
-        Stack<int> stack = new Stack<int>();
-        stack.Push(10);
-        stack.Push(20);
-        Console.WriteLine($"Top Element: {stack.GetTop()}");
-        Console.WriteLine($"Popped: {stack.Pop()}");
-
-        Console.WriteLine("\nQueue Example:");
-        Queue<int> queue = new Queue<int>();
-        queue.Enqueue(10);
-        queue.Enqueue(20);
-        Console.WriteLine($"Dequeued: {queue.Dequeue()}");
-        Console.WriteLine($"Queue Size: {queue.Size()}");
+        return IsValidBST(node.Left, min, node.Data) && // The left subtree must be less than current node
+               IsValidBST(node.Right, node.Data, max);  // The right subtree must be greater than current node
     }
 }
